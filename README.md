@@ -16,7 +16,7 @@ Generated using tabletop-style dice mechanics
 
 Names: Loaded from an Excel workbook (first + last when appropriate)
 
-🧠 How It Works
+How It Works
 
 Loads name data from Python Character Generator.xlsx using openpyxl.
 
