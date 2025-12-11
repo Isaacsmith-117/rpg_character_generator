@@ -2,6 +2,7 @@ Fantasy Character Generator (Excel-Based)
 
 A Python program that generates fully random NPC characters for a custom fantasy world. It uses regional lore, race-based traits, dice-rolled stats, and Excel-loaded name data via openpyxl.
 
+
 Features
 
 Regions: Borealans, Tropicanis, Selvarossa, Verdanian
@@ -16,6 +17,7 @@ Generated using tabletop-style dice mechanics
 
 Names: Loaded from an Excel workbook (first + last when appropriate)
 
+
 How It Works
 
 Loads name data from Python Character Generator.xlsx using openpyxl.
@@ -27,6 +29,7 @@ Generates physical traits using race-defined ranges.
 Rolls stats using custom dice rules.
 
 Builds and prints a formatted character profile.
+
 
 Requirements
 
