@@ -1,31 +1,14 @@
+# Note: This program requires the openpyxl module.
+# Install it with: pip install openpyxl
 # ========================
 # PART 1: IMPORTS & CONSTANTS 
 # ========================
 
 import random
-
-
-# ========================
-# PART 2: Display Menu
-# ========================
-
-def menu():
-    print("______________________Random Character Generator______________________\n")
-    print("            This is a random character generator that will            \n")
-    print("          create a character with the following information:          \n")
-    print("              Home Region, Home City, Physical Features,              \n")
-    print("                    Gender, Race, Stats, and Name                     \n\n")
-    print("               Would you like to create a new character?              \n")
-
-    user_choice = input("                                 Y/N: ")
-    while user_choice.upper() not in ("Y", "N"):
-        print("              That is not a valid input. Please Try Again.")
-        user_choice = input("                                 Y/N: ")
-    return user_choice
-
+import openpyxl
 
 # ========================
-# PART 3: WORLD BACKGROUND & REGIONS
+# PART 2: WORLD BACKGROUND & REGIONS
 # ========================
 
 # Define the four regions with their themes, allowed races, and major cities
@@ -84,7 +67,7 @@ def generate_background():
 
 
 # ========================
-# PART 4: PHYSICAL CHARACTERISTICS
+# PART 3: PHYSICAL CHARACTERISTICS
 # ========================
 
 # Define height ranges for each race (stored as min and max in inches)
@@ -185,7 +168,7 @@ def generate_physical_traits(race):
 
 
 # ========================
-# PART 5: STATS GENERATOR (DICE MECHANICS)
+# PART 4: STATS GENERATOR (DICE MECHANICS)
 # ========================
 
 # Roll one die with the given number of sides
@@ -293,94 +276,419 @@ def generate_stats():
 
 
 # ========================
-# PART 6: NAME GENERATOR 
+# PART 5: NAME GENERATOR USING EXCEL
 # ========================
 
-def name_generator(region, race, gender): #generate the names of the species
-    file_name = None  # initialize variable
+# Load name data from Excel file
+def load_name_data(excel_path):
+    workbook = openpyxl.load_workbook(excel_path)
+    name_data = {}
+    
+    # Load Borealan Human names
+    if "Borealan Human names" in workbook.sheetnames:
+        sheet = workbook["Borealan Human names"]
+        male_first = []
+        female_first = []
+        last_names = []
+        
+        # Column A has male names starting at row 3
+        row = 3
+        while sheet.cell(row=row, column=1).value is not None:
+            male_name = sheet.cell(row=row, column=1).value
+            male_first.append(str(male_name))
+            row += 1
+        
+        # Column C has female names starting at row 3
+        row = 3
+        while sheet.cell(row=row, column=3).value is not None:
+            female_name = sheet.cell(row=row, column=3).value
+            female_first.append(str(female_name))
+            row += 1
+        
+        # Column E has last names starting at row 3
+        row = 3
+        while sheet.cell(row=row, column=5).value is not None:
+            last_name = sheet.cell(row=row, column=5).value
+            last_names.append(str(last_name))
+            row += 1
+        
+        name_data["human_borealan"] = {
+            "male_first": male_first,
+            "female_first": female_first,
+            "last": last_names
+        }
+    
+    # Load Tropicanis Human names
+    if "Tropicanis Human Names" in workbook.sheetnames:
+        sheet = workbook["Tropicanis Human Names"]
+        male_first = []
+        female_first = []
+        last_names = []
+        
+        # Column A has male names starting at row 3
+        row = 3
+        while sheet.cell(row=row, column=1).value is not None:
+            male_name = sheet.cell(row=row, column=1).value
+            male_first.append(str(male_name))
+            row += 1
+        
+        # Column C has female names starting at row 3
+        row = 3
+        while sheet.cell(row=row, column=3).value is not None:
+            female_name = sheet.cell(row=row, column=3).value
+            female_first.append(str(female_name))
+            row += 1
+        
+        # Column E has last names starting at row 3
+        row = 3
+        while sheet.cell(row=row, column=5).value is not None:
+            last_name = sheet.cell(row=row, column=5).value
+            last_names.append(str(last_name))
+            row += 1
+        
+        name_data["human_tropicanis"] = {
+            "male_first": male_first,
+            "female_first": female_first,
+            "last": last_names
+        }
+    
+    # Load Selvarossa Human names
+    if "Selvarossa Humans" in workbook.sheetnames:
+        sheet = workbook["Selvarossa Humans"]
+        male_first = []
+        female_first = []
+        last_names = []
+        
+        # Column A has male names starting at row 3
+        row = 3
+        while sheet.cell(row=row, column=1).value is not None:
+            male_name = sheet.cell(row=row, column=1).value
+            male_first.append(str(male_name))
+            row += 1
+        
+        # Column C has female names starting at row 3
+        row = 3
+        while sheet.cell(row=row, column=3).value is not None:
+            female_name = sheet.cell(row=row, column=3).value
+            female_first.append(str(female_name))
+            row += 1
+        
+        # Column E has last names starting at row 3
+        row = 3
+        while sheet.cell(row=row, column=5).value is not None:
+            last_name = sheet.cell(row=row, column=5).value
+            last_names.append(str(last_name))
+            row += 1
+        
+        name_data["human_selvarossa"] = {
+            "male_first": male_first,
+            "female_first": female_first,
+            "last": last_names
+        }
+    
+    # Load Northern Orc names
+    if "Northern Orc names" in workbook.sheetnames:
+        sheet = workbook["Northern Orc names"]
+        first_names = []
+        last_names = []
+        
+        # Column A has androgynous first names starting at row 3
+        row = 3
+        while sheet.cell(row=row, column=1).value is not None:
+            first_name = sheet.cell(row=row, column=1).value
+            first_names.append(str(first_name))
+            row += 1
+        
+        # Column C has last names starting at row 3
+        row = 3
+        while sheet.cell(row=row, column=3).value is not None:
+            last_name = sheet.cell(row=row, column=3).value
+            last_names.append(str(last_name))
+            row += 1
+        
+        name_data["orc_northern"] = {
+            "first": first_names,
+            "last": last_names
+        }
+    
+    # Load Dwarven names
+    if "Dwarven Names (All regions)" in workbook.sheetnames:
+        sheet = workbook["Dwarven Names (All regions)"]
+        male_first = []
+        female_first = []
+        
+        # Column A has male names starting at row 3
+        row = 3
+        while sheet.cell(row=row, column=1).value is not None:
+            male_name = sheet.cell(row=row, column=1).value
+            male_first.append(str(male_name))
+            row += 1
+        
+        # Column C has female names starting at row 3
+        row = 3
+        while sheet.cell(row=row, column=3).value is not None:
+            female_name = sheet.cell(row=row, column=3).value
+            female_first.append(str(female_name))
+            row += 1
+        
+        # Dwarves use human last names from Borealan sheet (we'll handle this in generate_name)
+        name_data["dwarf"] = {
+            "male_first": male_first,
+            "female_first": female_first
+        }
+    
+    # Load Aelven names
+    if "Aelven names" in workbook.sheetnames:
+        sheet = workbook["Aelven names"]
+        male_first = []
+        female_first = []
+        last_names = []
+        
+        # Column A has male names starting at row 3
+        row = 3
+        while sheet.cell(row=row, column=1).value is not None:
+            male_name = sheet.cell(row=row, column=1).value
+            male_first.append(str(male_name))
+            row += 1
+        
+        # Column C has female names starting at row 3
+        row = 3
+        while sheet.cell(row=row, column=3).value is not None:
+            female_name = sheet.cell(row=row, column=3).value
+            female_first.append(str(female_name))
+            row += 1
+        
+        # Column E has last names starting at row 3
+        row = 3
+        while sheet.cell(row=row, column=5).value is not None:
+            last_name = sheet.cell(row=row, column=5).value
+            last_names.append(str(last_name))
+            row += 1
+        
+        name_data["aelf"] = {
+            "male_first": male_first,
+            "female_first": female_first,
+            "last": last_names
+        }
+    
+    # Load Centaur names
+    if "Centaur names" in workbook.sheetnames:
+        sheet = workbook["Centaur names"]
+        male_first = []
+        female_first = []
+        
+        # Column A has male names starting at row 4 (row 3 is header)
+        row = 4
+        while sheet.cell(row=row, column=1).value is not None:
+            male_name = sheet.cell(row=row, column=1).value
+            male_first.append(str(male_name))
+            row += 1
+        
+        # Column C has female names starting at row 4
+        row = 4
+        while sheet.cell(row=row, column=3).value is not None:
+            female_name = sheet.cell(row=row, column=3).value
+            female_first.append(str(female_name))
+            row += 1
+        
+        # Centaurs don't have last names
+        name_data["centaur"] = {
+            "male_first": male_first,
+            "female_first": female_first
+        }
+    
+    # Load Saurian names
+    if "Saurian names" in workbook.sheetnames:
+        sheet = workbook["Saurian names"]
+        first_names = []
+        last_names = []
+        
+        # Column A has androgynous first names starting at row 3
+        row = 3
+        while sheet.cell(row=row, column=1).value is not None:
+            first_name = sheet.cell(row=row, column=1).value
+            first_names.append(str(first_name))
+            row += 1
+        
+        # Column C has last names starting at row 3
+        row = 3
+        while sheet.cell(row=row, column=3).value is not None:
+            last_name = sheet.cell(row=row, column=3).value
+            last_names.append(str(last_name))
+            row += 1
+        
+        name_data["saurian"] = {
+            "first": first_names,
+            "last": last_names
+        }
+    
+    # Load Faerie names
+    if "Faerie names" in workbook.sheetnames:
+        sheet = workbook["Faerie names"]
+        first_names = []
+        last_names = []
+        
+        # Column A has androgynous first names starting at row 3
+        row = 3
+        while sheet.cell(row=row, column=1).value is not None:
+            first_name = sheet.cell(row=row, column=1).value
+            first_names.append(str(first_name))
+            row += 1
+        
+        # Column C has last names starting at row 3
+        row = 3
+        while sheet.cell(row=row, column=3).value is not None:
+            last_name = sheet.cell(row=row, column=3).value
+            last_names.append(str(last_name))
+            row += 1
+        
+        name_data["faerie"] = {
+            "first": first_names,
+            "last": last_names
+        }
+    
+    workbook.close()
+    return name_data
 
-    #humans
+
+# Generate a name based on region, race, and gender
+def generate_name(region, race, gender, name_data):
+    first_name = ""
+    last_name = ""
+    
+    # Handle Humans based on region
     if race == "Human":
-        if gender == "Male":
-            file_name = region.lower() + "_male_human_names.txt"
-        else:
-            file_name = region.lower() + "_female_human_names.txt"
-
-    #Dwarves
+        if region == "Borealans":
+            if gender == "Male":
+                first_name = random.choice(name_data["human_borealan"]["male_first"])
+            elif gender == "Female":
+                first_name = random.choice(name_data["human_borealan"]["female_first"])
+            else:  # Nonbinary
+                if random.choice([True, False]):
+                    first_name = random.choice(name_data["human_borealan"]["male_first"])
+                else:
+                    first_name = random.choice(name_data["human_borealan"]["female_first"])
+            last_name = random.choice(name_data["human_borealan"]["last"])
+        
+        elif region == "Tropicanis":
+            if gender == "Male":
+                first_name = random.choice(name_data["human_tropicanis"]["male_first"])
+            elif gender == "Female":
+                first_name = random.choice(name_data["human_tropicanis"]["female_first"])
+            else:  # Nonbinary
+                if random.choice([True, False]):
+                    first_name = random.choice(name_data["human_tropicanis"]["male_first"])
+                else:
+                    first_name = random.choice(name_data["human_tropicanis"]["female_first"])
+            last_name = random.choice(name_data["human_tropicanis"]["last"])
+        
+        elif region == "Selvarossa":
+            if gender == "Male":
+                first_name = random.choice(name_data["human_selvarossa"]["male_first"])
+            elif gender == "Female":
+                first_name = random.choice(name_data["human_selvarossa"]["female_first"])
+            else:  # Nonbinary
+                if random.choice([True, False]):
+                    first_name = random.choice(name_data["human_selvarossa"]["male_first"])
+                else:
+                    first_name = random.choice(name_data["human_selvarossa"]["female_first"])
+            last_name = random.choice(name_data["human_selvarossa"]["last"])
+        
+        elif region == "Verdanian":
+            # Verdanian uses Borealan names
+            if gender == "Male":
+                first_name = random.choice(name_data["human_borealan"]["male_first"])
+            elif gender == "Female":
+                first_name = random.choice(name_data["human_borealan"]["female_first"])
+            else:  # Nonbinary
+                if random.choice([True, False]):
+                    first_name = random.choice(name_data["human_borealan"]["male_first"])
+                else:
+                    first_name = random.choice(name_data["human_borealan"]["female_first"])
+            last_name = random.choice(name_data["human_borealan"]["last"])
+    
+    elif race == "Orc":
+        # orcs use androgynous names
+        first_name = random.choice(name_data["orc_northern"]["first"])
+        last_name = random.choice(name_data["orc_northern"]["last"])
+    
     elif race == "Dwarf":
         if gender == "Male":
-            file_name = "male_dwarven_names.txt"
-        else:
-            file_name = "female_dwarven_names.txt"
-
-    #orcs
-    elif race == "Orc":
-        file_name = "northern_orc_first_names.txt"
-
-    #Halflings
+            first_name = random.choice(name_data["dwarf"]["male_first"])
+        elif gender == "Female":
+            first_name = random.choice(name_data["dwarf"]["female_first"])
+        else:  # Nonbinary
+            if random.choice([True, False]):
+                first_name = random.choice(name_data["dwarf"]["male_first"])
+            else:
+                first_name = random.choice(name_data["dwarf"]["female_first"])
+        # dwarves use human last names
+        last_name = random.choice(name_data["human_borealan"]["last"])
+    
+    elif race == "Saurian":
+        first_name = random.choice(name_data["saurian"]["first"])
+        last_name = random.choice(name_data["saurian"]["last"])
+    
     elif race == "Halfling":
+        # halflings use tropicanis human names
         if gender == "Male":
-            file_name = "male_halfling_names.txt"
-        else:
-            file_name = "female_halfling_names.txt"
-
-    #ealves
+            first_name = random.choice(name_data["human_tropicanis"]["male_first"])
+        elif gender == "Female":
+            first_name = random.choice(name_data["human_tropicanis"]["female_first"])
+        else:  # Nonbinary
+            if random.choice([True, False]):
+                first_name = random.choice(name_data["human_tropicanis"]["male_first"])
+            else:
+                first_name = random.choice(name_data["human_tropicanis"]["female_first"])
+        last_name = random.choice(name_data["human_tropicanis"]["last"])
+    
     elif race == "Aelf":
         if gender == "Male":
-            file_name = "male_aelven_names.txt"
-        else:
-            file_name = "female_aelven_names.txt"
-
-    #Faeries
+            first_name = random.choice(name_data["aelf"]["male_first"])
+        elif gender == "Female":
+            first_name = random.choice(name_data["aelf"]["female_first"])
+        else:  # Nonbinary
+            if random.choice([True, False]):
+                first_name = random.choice(name_data["aelf"]["male_first"])
+            else:
+                first_name = random.choice(name_data["aelf"]["female_first"])
+        last_name = random.choice(name_data["aelf"]["last"])
+    
     elif race == "Faerie":
-        file_name = "faerie_first_names.txt"
-
-    #Centaurs
+        first_name = random.choice(name_data["faerie"]["first"])
+        last_name = random.choice(name_data["faerie"]["last"])
+    
     elif race == "Centaur":
         if gender == "Male":
-            file_name = "male_centaur_names.txt"
-        else:
-            file_name = "female_centaur_names.txt"
+            first_name = random.choice(name_data["centaur"]["male_first"])
+        elif gender == "Female":
+            first_name = random.choice(name_data["centaur"]["female_first"])
+        else:  # Nonbinary
+            if random.choice([True, False]):
+                first_name = random.choice(name_data["centaur"]["male_first"])
+            else:
+                first_name = random.choice(name_data["centaur"]["female_first"])
+        # centaurs don't have last names
+    
+    # put name together
+    if last_name:
+        full_name = first_name + " " + last_name
+    else:
+        full_name = first_name
+    
+    return full_name
 
-    #Saurians
-    elif race == "Saurian":
-        file_name = "saurian_first_names.txt"
 
-    #If no file was matched raise an error
-    if file_name is None:
-        raise ValueError(f"No name file found for race: {race}, gender: {gender}, region: {region}")
+# ========================
+# PART 6: PUTTING IT ALL TOGETHER
+# ========================
 
-    #Open first name file
-    with open(file_name, "r") as f:
-        first_name = random.choice(f.readlines()).strip()
-
-    #Determine last name
-    last_name = ""
-    if race in ["Human", "Orc", "Aelf", "Faerie", "Saurian", "Halfling"]:
-        if race == "Human":
-            last_file = region.lower() + "_human_last_names.txt"
-        elif race == "Orc":
-            last_file = "northern_orc_last_names.txt"
-        elif race == "Halfling":
-            last_file = "halfling_last_names.txt"
-        elif race == "Aelf":
-            last_file = "aelven_last_names.txt"
-        elif race == "Faerie":
-            last_file = "faerie_last_names.txt"
-        elif race == "Saurian":
-            last_file = "saurian_last_names.txt"
-
-        with open(last_file, "r") as f:
-            last_name = random.choice(f.readlines()).strip()
-
-    #Return either "First Last" or just "First" if last_name is empty
-    return f"{first_name} {last_name}".strip()
-
-def generate_character():
+# Generate a complete NPC character with background, physical traits, stats, and name
+def generate_character(name_data):
     background = generate_background()
     physical_traits = generate_physical_traits(background["race"])
     stats = generate_stats()
-    name = name_generator(background["region"], background["race"], background["gender"])
+    name = generate_name(background["region"], background["race"], background["gender"], name_data)
     
     character = {
         "name": name,
@@ -426,54 +734,46 @@ def print_character(character):
     print()
 
 
-
+# Main function
 def main():
-
-    user_choice = menu()
-    if user_choice.upper() == "N":
-        print("Alright, cya next time")
+    excel_file_path = "Python Character Generator.xlsx"
+    name_data = load_name_data(excel_file_path)
+    print("This program generates random NPC (non-player character) profiles for a fantasy game.")
+    print("Each character will have a name, region, city, race, gender, physical traits, and stats.")
+    print()
     
-    else:   
-        #ask for input until we get a valid number
-        valid_input = False
-        number_of_characters = 0
-
-        while not valid_input:
-            user_input = input("How many characters would you like to generate? ")
+    # ask for input until we get a valid number
+    valid_input = False
+    number_of_characters = 0
+    
+    while not valid_input:
+        user_input = input("How many characters would you like to generate? ")
         
-            # check if input is all digits
-            if user_input.isdigit():
-                number_of_characters = int(user_input)
+        # check if input is all digits
+        if user_input.isdigit():
+            number_of_characters = int(user_input)
             
-                # check if it's positive
-                if number_of_characters > 0:
-                    valid_input = True
-                else:
-                    print("Please enter a positive number (greater than 0).")
+            # check if it's positive
+            if number_of_characters > 0:
+                valid_input = True
             else:
-                print("Please enter a valid number.")
+                print("Please enter a positive number (greater than 0).")
+        else:
+            print("Please enter a valid number.")
     
     
-        print()
-        print("Generating " + str(number_of_characters) + " character(s)...")
-        print()
+    print()
+    print("Generating " + str(number_of_characters) + " character(s)...")
+    print()
     
-        all_characters = []
-        for i in range(number_of_characters):
-            char = generate_character()
-            all_characters.append(char)
+    all_characters = []
+    for i in range(number_of_characters):
+        char = generate_character(name_data)
+        all_characters.append(char)
     
-        for char in all_characters:
-            print_character(char)
-
-
-
-
-
-
+    for char in all_characters:
+        print_character(char)
 
 
 main()
-
-
 
